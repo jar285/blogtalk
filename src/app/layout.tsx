@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import MouseBlob from "@/components/MouseBlob";
 import CommandMenu from "@/components/CommandMenu";
+import ProgressBar from "@/components/ProgressBar";
 
 import { getAllPosts } from '@/lib/markdown';
 
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ProgressBar />
         <MouseBlob />
         <CommandMenu posts={posts} />
         <div className="container">
