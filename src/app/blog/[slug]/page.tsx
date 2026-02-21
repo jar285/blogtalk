@@ -1,4 +1,5 @@
 import { getAllPosts, getPostBySlug } from '@/lib/markdown';
+import NewsletterCTA from '@/components/NewsletterCTA';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -88,6 +89,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     >
                         {post.content}
                     </ReactMarkdown>
+                    <NewsletterCTA />
                 </div>
 
                 <aside className="post-sidebar">
