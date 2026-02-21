@@ -3,6 +3,9 @@ import './globals.css'
 import Link from 'next/link'
 
 import MouseBlob from "@/components/MouseBlob";
+import CommandMenu from "@/components/CommandMenu";
+
+import { getAllPosts } from '@/lib/markdown';
 
 export const metadata: Metadata = {
   title: "Jesus Blog",
@@ -14,10 +17,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch posts at build time to power the global search
+  const posts = getAllPosts();
+
   return (
     <html lang="en">
       <body>
         <MouseBlob />
+        <CommandMenu posts={posts} />
         <div className="container">
           <nav>
             <Link href="/" className="logo">Jesus Blog</Link>

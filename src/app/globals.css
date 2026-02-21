@@ -434,3 +434,108 @@ footer {
   border-top: 1px solid var(--glass-border);
   margin-top: 4rem;
 }
+
+/* Command Palette (cmdk) */
+.cmdk-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.cmdk-dialog {
+  width: 100%;
+  max-width: 640px;
+  background: var(--bg-color);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.cmdk-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0 1rem;
+}
+
+.cmdk-search-icon {
+  color: var(--text-secondary);
+  margin-right: 0.75rem;
+}
+
+.cmdk-dialog [cmdk-input] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.125rem;
+  padding: 1.25rem 0;
+  outline: none;
+  font-family: inherit;
+}
+
+.cmdk-dialog [cmdk-input]::placeholder {
+  color: var(--text-secondary);
+}
+
+.cmdk-dialog [cmdk-list] {
+  max-height: 400px;
+  overflow: auto;
+  padding: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+.cmdk-dialog [cmdk-empty] {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.cmdk-dialog [cmdk-group-heading] {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.cmdk-dialog [cmdk-item] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.cmdk-dialog [cmdk-item][aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.cmdk-dialog [cmdk-item] svg {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cmdk-dialog [cmdk-item][aria-selected="true"] svg {
+  color: var(--accent-color);
+}
