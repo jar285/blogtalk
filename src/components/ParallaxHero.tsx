@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, Children } from 'react';
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface ParallaxHeroProps {
     children: React.ReactNode;
@@ -19,10 +19,6 @@ export default function ParallaxHero({ children }: ParallaxHeroProps) {
     const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
     const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
-    // Dynamic variable font weight for the title (300 → 800)
-    // As you scroll down (0 to 0.4 progress), font weight increases
-    const titleWeight = useTransform(scrollYProgress, [0, 0.4], [300, 800]);
-
     const childArray = Children.toArray(children);
 
     return (
@@ -33,14 +29,8 @@ export default function ParallaxHero({ children }: ParallaxHeroProps) {
         >
             {childArray.map((child, i) => {
                 const speed = speeds[i] ?? -20;
-                const isTitle = i === 0;
                 return (
-                    <ParallaxLayer
-                        key={i}
-                        scrollYProgress={scrollYProgress}
-                        speed={speed}
-                        fontWeight={isTitle ? titleWeight : undefined}
-                    >
+                    <ParallaxLayer key={i} scrollYProgress={scrollYProgress} speed={speed}>
                         {child}
                     </ParallaxLayer>
                 );
@@ -53,17 +43,15 @@ function ParallaxLayer({
     children,
     scrollYProgress,
     speed,
-    fontWeight,
 }: {
     children: React.ReactNode;
     scrollYProgress: any;
     speed: number;
-    fontWeight?: MotionValue<number>;
 }) {
     const y = useTransform(scrollYProgress, [0, 1], [0, speed]);
 
     return (
-        <motion.div style={{ y, fontWeight }}>
+        <motion.div style={{ y }}>
             {children}
         </motion.div>
     );
