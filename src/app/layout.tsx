@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Link from 'next/link'
 
 import MouseBlob from "@/components/MouseBlob";
 import CommandMenu from "@/components/CommandMenu";
 import ProgressBar from "@/components/ProgressBar";
+import NavBar from "@/components/NavBar";
 
 import { getAllPosts } from '@/lib/markdown';
 
@@ -28,15 +28,7 @@ export default function RootLayout({
         <MouseBlob />
         <CommandMenu posts={posts} />
         <div className="container">
-          <nav>
-            <Link href="/" className="logo">Jesus Blog</Link>
-            <div className="nav-links">
-              <Link href="/">Home</Link>
-              <Link href="/blog">Articles</Link>
-              <Link href="/projects">Projects</Link>
-              <kbd className="cmdk-trigger">⌘K</kbd>
-            </div>
-          </nav>
+          <NavBar />
 
           <main>
             {children}
