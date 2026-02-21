@@ -1,11 +1,11 @@
 ---
-title: "How to Author a New Post on BlogTalk"
+title: "How to Author a New Post on Jesus Blog"
 date: "2026-02-21"
 excerpt: "A quick tutorial on YAML frontmatter, Markdown features, and publishing your thoughts instantly."
 tags: ["tutorial", "markdown", "publishing"]
 ---
 
-Because we're using the local file system as our Content API, publishing a new post on BlogTalk is wonderfully simple. There are no databases to sync, no rich-text editors to fight with, and no complex deployment scripts to run locally.
+Because we're using the local file system as our Content API, publishing a new post on Jesus Blog is wonderfully simple. There are no databases to sync, no rich-text editors to fight with, and no complex deployment scripts to run locally.
 
 Here is exactly how you write and publish a new blog post.
 

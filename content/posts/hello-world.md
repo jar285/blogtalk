@@ -6,7 +6,7 @@ tags: ["nextjs", "markdown", "ssg"]
 coverImage: "/blogtalk/images/hello-world.jpg"
 ---
 
-Welcome to my first post on **BlogTalk**!
+Welcome to my first post on **Jesus Blog**!
 
 When deciding how to build this blog, I wanted something fast, reliable, and completely within my control. While platforms like Medium and Substack are great for reach, you don't truly *own* your content. 
 

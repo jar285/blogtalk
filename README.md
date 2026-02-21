@@ -1,4 +1,4 @@
-# BlogTalk
+# Jesus Blog
 A fast, beautiful, statically-generated personal blog built with Next.js, Markdown, and deployed to GitHub Pages.
 
 Designed with a premium dark glassmorphism aesthetic and optimized for a seamless writing experience.

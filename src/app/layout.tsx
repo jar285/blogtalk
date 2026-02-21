@@ -3,7 +3,7 @@ import './globals.css'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'BlogTalk - Personal Markdown Blog',
+  title: 'Jesus Blog - Personal Markdown Blog',
   description: 'A personal blog powered by Next.js and Markdown',
 }
 
@@ -18,7 +18,7 @@ export default function RootLayout({
         <div className="container">
           <nav>
             <div className="logo">
-              <Link href="/">BlogTalk</Link>
+              <Link href="/">Jesus Blog</Link>
             </div>
             <div className="nav-links">
               <Link href="/">Home</Link>
