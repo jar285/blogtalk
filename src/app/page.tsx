@@ -3,20 +3,21 @@ import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
 import TextReveal from '@/components/TextReveal';
+import ParallaxHero from '@/components/ParallaxHero';
 
 export default function Home() {
   const homeData = getHomeData();
-  const recentPosts = getAllPosts().slice(0, 3); // Get top 3 latest posts
+  const recentPosts = getAllPosts().slice(0, 3);
 
   return (
     <div>
-      <section className="hero">
+      <ParallaxHero>
         <TextReveal as="h1">{homeData.title}</TextReveal>
         <TextReveal as="p" className="tagline" delay={0.2} stagger={0.03}>{homeData.subtitle}</TextReveal>
         <TextReveal as="p" className="tagline" style={{ fontSize: '1.2rem', color: 'var(--accent-color)' }} delay={0.4} stagger={0.03}>
           {homeData.tagline}
         </TextReveal>
-      </section>
+      </ParallaxHero>
 
       <section className="glass-card" style={{ padding: '3rem', marginBottom: '4rem' }}>
         <div className="markdown-content">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useScroll, useTransform } from 'framer-motion';
 
 export default function MouseBlob() {
     const [mounted, setMounted] = useState(false);
@@ -12,6 +12,10 @@ export default function MouseBlob() {
     const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
     const smoothX = useSpring(mouseX, springConfig);
     const smoothY = useSpring(mouseY, springConfig);
+
+    // Fade blob as user scrolls down
+    const { scrollY } = useScroll();
+    const blobOpacity = useTransform(scrollY, [0, 600], [0.6, 0.15]);
 
     useEffect(() => {
         setMounted(true);
@@ -42,8 +46,9 @@ export default function MouseBlob() {
                 pointerEvents: 'none',
                 zIndex: -1,
                 filter: 'blur(50px)',
-                opacity: 0.6,
+                opacity: blobOpacity,
             }}
         />
     );
 }
+
