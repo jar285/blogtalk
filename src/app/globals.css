@@ -814,3 +814,17 @@ footer {
 .bento-link:hover {
   color: var(--accent-color);
 }
+
+/* ⌘K Keyboard Hint */
+.cmdk-trigger {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: default;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}

@@ -33,6 +33,8 @@ export default function RootLayout({
             <div className="nav-links">
               <Link href="/">Home</Link>
               <Link href="/blog">Articles</Link>
+              <Link href="/projects">Projects</Link>
+              <kbd className="cmdk-trigger">⌘K</kbd>
             </div>
           </nav>
 
