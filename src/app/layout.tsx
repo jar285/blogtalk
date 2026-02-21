@@ -2,24 +2,25 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Link from 'next/link'
 
+import MouseBlob from "@/components/MouseBlob";
+
 export const metadata: Metadata = {
-  title: 'Jesus Blog - Personal Markdown Blog',
-  description: 'A personal blog powered by Next.js and Markdown',
-}
+  title: "Jesus Blog",
+  description: "A personal space for thoughts, code, and design.",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body>
+        <MouseBlob />
         <div className="container">
           <nav>
-            <div className="logo">
-              <Link href="/">Jesus Blog</Link>
-            </div>
+            <Link href="/" className="logo">Jesus Blog</Link>
             <div className="nav-links">
               <Link href="/">Home</Link>
               <Link href="/blog">Articles</Link>
