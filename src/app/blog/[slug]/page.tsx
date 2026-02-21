@@ -14,6 +14,8 @@ export async function generateStaticParams() {
     }));
 }
 
+import CodeBlock from '@/components/CodeBlock';
+
 // Helper to generate a slug from plain text identical to rehypeSlug
 function slugify(text: string) {
     return text
@@ -69,6 +71,20 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
+                        components={{
+                            code({ node, inline, className, children, ...props }: any) {
+                                const match = /language-(\w+)/.exec(className || '');
+                                return !inline && match ? (
+                                    <CodeBlock className={className} {...props}>
+                                        {children}
+                                    </CodeBlock>
+                                ) : (
+                                    <code className={className} {...props}>
+                                        {children}
+                                    </code>
+                                );
+                            },
+                        }}
                     >
                         {post.content}
                     </ReactMarkdown>

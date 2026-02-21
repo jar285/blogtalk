@@ -629,3 +629,82 @@ footer {
   background: var(--accent-color);
   border-radius: 4px;
 }
+
+/* Interactive Code Blocks */
+.code-block-container {
+  background: #111;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.code-block-container pre {
+  margin-bottom: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.code-block-mac-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.mac-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mac-dot.close {
+  background: #ff5f56;
+}
+
+.mac-dot.minimize {
+  background: #ffbd2e;
+}
+
+.mac-dot.maximize {
+  background: #27c93f;
+}
+
+.code-block-language {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.code-block-copy {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  padding: 0.2rem;
+}
+
+.code-block-copy:hover {
+  color: #fff;
+}
+
+.copied-icon {
+  color: #27c93f;
+}
