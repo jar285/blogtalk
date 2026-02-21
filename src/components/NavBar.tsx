@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import MagneticElement from './MagneticElement';
+import ThemeToggle from './ThemeToggle';
 
 export default function NavBar() {
     const openCommandPalette = () => {
@@ -28,6 +29,7 @@ export default function NavBar() {
                         ⌘K
                     </kbd>
                 </MagneticElement>
+                <ThemeToggle />
             </div>
         </nav>
     );
