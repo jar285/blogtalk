@@ -2,7 +2,7 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import TextReveal from '@/components/TextReveal';
 
 export const metadata = {
-    title: 'Projects | Jesus Blog',
+    title: "Projects | Jesus's Blog",
     description: 'A collection of my work, side projects, and open-source contributions.',
 };
 

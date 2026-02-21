@@ -9,7 +9,7 @@ import NavBar from "@/components/NavBar";
 import { getAllPosts } from '@/lib/markdown';
 
 export const metadata: Metadata = {
-  title: "Jesus Blog",
+  title: "Jesus's Blog",
   description: "A personal space for thoughts, code, and design.",
 };
 

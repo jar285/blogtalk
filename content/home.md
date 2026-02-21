@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Jesus Blog"
+title: "Welcome to Jesus's Blog"
 subtitle: "A personal space for thoughts, code, and design."
 tagline: "Built with Next.js, fueled by Markdown, deployed on GitHub Pages."
 ---

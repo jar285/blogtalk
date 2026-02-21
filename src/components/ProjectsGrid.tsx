@@ -51,7 +51,7 @@ const projects: Project[] = [
         github: "https://github.com/jar285/discord-bot",
     },
     {
-        title: "Jesus Blog",
+        title: "Jesus's Blog",
         description: "This very site — a radically fast, premium Next.js markdown blog with a ⌘K command palette, dynamic mouse-tracking background, scrollspy TOC, and interactive code blocks.",
         tech: ["Next.js", "React", "Framer Motion", "Markdown"],
         link: "https://jar285.github.io/blogtalk",

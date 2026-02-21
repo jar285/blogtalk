@@ -12,7 +12,7 @@ export default function NavBar() {
 
     return (
         <nav>
-            <Link href="/" className="logo">Jesus Blog</Link>
+            <Link href="/" className="logo">Jesus&apos;s Blog</Link>
             <div className="nav-links">
                 <MagneticElement strength={0.25}>
                     <Link href="/">Home</Link>
