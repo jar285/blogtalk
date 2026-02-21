@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export',
+  // Use basePath for GitHub Pages deployed to a subfolder
+  basePath: isProd ? '/blogtalk' : '',
+  // Disable server-based image optimization for static export
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
