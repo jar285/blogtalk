@@ -51,7 +51,7 @@ export default function ArchiveList({ posts }: { posts: Omit<PostData, 'content'
                         </div>
                         <div className="list-content">
                             <div className="list-header">
-                                <h3>{post.title}</h3>
+                                <motion.h3 layoutId={`post-title-${post.slug}`}>{post.title}</motion.h3>
                                 <div className="tags">
                                     {post.tags.map((tag) => (
                                         <span key={tag} className="tag">{tag.toUpperCase()}</span>
