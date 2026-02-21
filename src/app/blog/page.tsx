@@ -1,5 +1,6 @@
 import { getAllPosts } from '@/lib/markdown';
 import ArchiveList from '@/components/ArchiveList';
+import TextReveal from '@/components/TextReveal';
 
 export default function BlogPage() {
     // Fetched server-side at build time using Node fs
@@ -17,14 +18,17 @@ export default function BlogPage() {
                 }}>
                     Archive
                 </span>
-                <h1 style={{
-                    fontSize: '4rem',
-                    fontWeight: 800,
-                    letterSpacing: '-1px',
-                    margin: '0.5rem 0'
-                }}>
+                <TextReveal
+                    as="h1"
+                    style={{
+                        fontSize: '4rem',
+                        fontWeight: 800,
+                        letterSpacing: '-1px',
+                        margin: '0.5rem 0'
+                    }}
+                >
                     All Essays
-                </h1>
+                </TextReveal>
                 <p className="meta" style={{
                     fontSize: '1.25rem',
                     color: 'var(--text-secondary)',

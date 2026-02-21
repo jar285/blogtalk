@@ -2,6 +2,7 @@ import { getHomeData, getAllPosts } from '@/lib/markdown';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
+import TextReveal from '@/components/TextReveal';
 
 export default function Home() {
   const homeData = getHomeData();
@@ -10,11 +11,11 @@ export default function Home() {
   return (
     <div>
       <section className="hero">
-        <h1>{homeData.title}</h1>
-        <p className="tagline">{homeData.subtitle}</p>
-        <p className="tagline" style={{ fontSize: '1.2rem', color: 'var(--accent-color)' }}>
+        <TextReveal as="h1">{homeData.title}</TextReveal>
+        <TextReveal as="p" className="tagline" delay={0.2} stagger={0.03}>{homeData.subtitle}</TextReveal>
+        <TextReveal as="p" className="tagline" style={{ fontSize: '1.2rem', color: 'var(--accent-color)' }} delay={0.4} stagger={0.03}>
           {homeData.tagline}
-        </p>
+        </TextReveal>
       </section>
 
       <section className="glass-card" style={{ padding: '3rem', marginBottom: '4rem' }}>
