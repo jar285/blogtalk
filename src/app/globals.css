@@ -222,31 +222,41 @@ nav {
 
 /* Markdown Content Content */
 .markdown-content {
-  font-size: 1.125rem;
-  color: #d1d5db;
+  font-size: 1.05rem;
+  /* Reduced from 1.125rem */
+  color: #dfdfdf;
+  line-height: 1.7;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3 {
   color: #fff;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
 }
 
 .markdown-content h2 {
-  font-size: 2rem;
+  font-size: 1.75rem;
+  /* Reduced from 2rem */
   border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
 }
 
 .markdown-content h3 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
+  /* Reduced from 1.5rem */
 }
 
 .markdown-content p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .markdown-content a {

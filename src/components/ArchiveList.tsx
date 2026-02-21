@@ -37,7 +37,17 @@ export default function ArchiveList({ posts }: { posts: Omit<PostData, 'content'
                 <motion.div key={post.slug} variants={item} className="list-item-wrapper">
                     <Link href={`/blog/${post.slug}`} className="list-item">
                         <div className="list-date">
-                            {formatFullDate(post.date)}
+                            <span style={{ display: 'block' }}>{formatFullDate(post.date)}</span>
+                            <span style={{
+                                display: 'block',
+                                marginTop: '0.4rem',
+                                fontSize: '0.85rem',
+                                color: '#d97706',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px'
+                            }}>
+                                {post.readingTime}
+                            </span>
                         </div>
                         <div className="list-content">
                             <div className="list-header">

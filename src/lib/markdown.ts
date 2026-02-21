@@ -18,6 +18,7 @@ export interface PostData {
     date: string;
     excerpt: string;
     tags: string[];
+    readingTime: string;
     coverImage?: string;
     content: string;
 }
@@ -48,7 +49,10 @@ export function getAllPosts(): Omit<PostData, 'content'>[] {
             const slug = fileName.replace(/\.md$/, '');
             const fullPath = path.join(postsDir, fileName);
             const fileContents = fs.readFileSync(fullPath, 'utf8');
-            const { data } = matter(fileContents);
+            const { data, content } = matter(fileContents);
+
+            const words = content.trim().split(/\s+/).length;
+            const readingTime = Math.ceil(words / 200) + ' min read';
 
             return {
                 slug,
@@ -56,6 +60,7 @@ export function getAllPosts(): Omit<PostData, 'content'>[] {
                 date: data.date,
                 excerpt: data.excerpt,
                 tags: data.tags || [],
+                readingTime,
                 coverImage: data.coverImage,
             };
         });
@@ -76,12 +81,16 @@ export function getPostBySlug(slug: string): PostData | null {
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
 
+        const words = content.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(words / 200) + ' min read';
+
         return {
             slug,
             title: data.title,
             date: data.date,
             excerpt: data.excerpt,
             tags: data.tags || [],
+            readingTime,
             coverImage: data.coverImage,
             content,
         };
