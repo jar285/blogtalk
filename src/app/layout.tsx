@@ -31,7 +31,7 @@ export default function RootLayout({
           </main>
 
           <footer>
-            <p>&copy; {new Date().getFullYear()} Franklind. Built with Next.js & Markdown.</p>
+            <p>&copy; {new Date().getFullYear()} Jesus Rosario. Built with Next.js & Markdown.</p>
           </footer>
         </div>
       </body>
