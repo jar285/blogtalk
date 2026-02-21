@@ -14,31 +14,50 @@ interface Project {
 
 const projects: Project[] = [
     {
+        title: "AI Consultant Portfolio",
+        description: "A YAML-driven static site generator for AI consultants. Edit your site with natural language via browser or CLI, preview locally, and deploy to GitHub Pages. Built with Clean Architecture and TDD.",
+        tech: ["TypeScript", "HTML", "CSS", "YAML", "GitHub Pages"],
+        github: "https://github.com/jar285/consultant",
+        featured: true,
+    },
+    {
+        title: "Research Toolkit",
+        description: "An autonomous research CLI for AI agents. Perform deep web research queries, generate onboarding docs, and maintain a structured knowledge library — all from the terminal. Built with Clean Architecture and strict dependency inversion.",
+        tech: ["Python", "Typer", "OpenAI", "DuckDuckGo"],
+        github: "https://github.com/jar285/ai-toolkit",
+    },
+    {
+        title: "JRcalculator",
+        description: "A native iOS/macOS calculator app built with SwiftUI. Features memory functions, calculation history with sidebar/sheet UI, spring-animated button presses, and full VoiceOver accessibility.",
+        tech: ["Swift", "SwiftUI", "XCTest"],
+        github: "https://github.com/jar285/IS322-SwiftCalculator",
+    },
+    {
+        title: "AI Portfolio Monorepo",
+        description: "A full-stack portfolio monorepo powered by Next.js 14 App Router, Prisma, and OpenAI. Includes a shared design system, RAG utilities, moderation filters, and Supabase Auth.",
+        tech: ["Next.js", "Prisma", "OpenAI", "Supabase", "Tailwind"],
+        link: "https://portfolio-web-neon-pi.vercel.app",
+        github: "https://github.com/jar285/portfolio",
+    },
+    {
+        title: "FastMCP",
+        description: "The fast, Pythonic way to build MCP (Model Context Protocol) servers and clients. Supports tool registration, resource templates, proxy servers, and OpenAPI/FastAPI generation.",
+        tech: ["Python", "MCP", "FastAPI"],
+        github: "https://github.com/jar285/fastmcp",
+    },
+    {
+        title: "Discord Bartender Bot",
+        description: "A Discord bot with slash commands for interacting with a virtual AI bartender. Powered by ChatGPT with scalable Kafka message processing and FastAPI backend.",
+        tech: ["Python", "Discord.py", "OpenAI", "Kafka", "FastAPI"],
+        github: "https://github.com/jar285/discord-bot",
+    },
+    {
         title: "Jesus Blog",
-        description: "A radically fast, intensely premium Next.js markdown blog. Features a globally accessible Command Palette, a dynamic physics-based background, scrollspy TOC, and interactive code blocks.",
-        tech: ["Next.js 15", "React", "Framer Motion", "Markdown"],
+        description: "This very site — a radically fast, premium Next.js markdown blog with a ⌘K command palette, dynamic mouse-tracking background, scrollspy TOC, and interactive code blocks.",
+        tech: ["Next.js", "React", "Framer Motion", "Markdown"],
         link: "https://jar285.github.io/blogtalk",
         github: "https://github.com/jar285/blogtalk",
-        featured: true // Takes up full width in grid
     },
-    {
-        title: "Echo AI",
-        description: "A local, private inference bridge linking macOS system audio to offline LLMs like LLaMA 3. Designed for privacy-first developers.",
-        tech: ["Python", "Ollama", "Whisper", "Swift"],
-        github: "https://github.com/example/echo-ai",
-    },
-    {
-        title: "Geometric Logic",
-        description: "A minimalist path-finding algorithm visualizer inspired by Bauhaus design principles. Built strictly with HTML Canvas.",
-        tech: ["TypeScript", "Canvas API", "CSS"],
-        link: "#",
-    },
-    {
-        title: "Terminal Fetch",
-        description: "A highly customizable system fetching tool for Unix-like operating systems. Written in pure Rust for sub-millisecond execution times.",
-        tech: ["Rust", "Bash"],
-        github: "#",
-    }
 ];
 
 export default function ProjectsGrid() {
