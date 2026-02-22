@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useReducedMotion } from 'framer-motion';
 
 interface MagneticElementProps {
     children: React.ReactNode;
@@ -24,8 +24,10 @@ export default function MagneticElement({
     const springX = useSpring(x, springConfig);
     const springY = useSpring(y, springConfig);
 
+    const prefersReducedMotion = useReducedMotion();
+
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (!ref.current) return;
+        if (!ref.current || prefersReducedMotion) return;
         const rect = ref.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;

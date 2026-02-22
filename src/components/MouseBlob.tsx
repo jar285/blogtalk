@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useSpring, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 
 export default function MouseBlob() {
     const [mounted, setMounted] = useState(false);
@@ -13,12 +13,21 @@ export default function MouseBlob() {
     const smoothX = useSpring(mouseX, springConfig);
     const smoothY = useSpring(mouseY, springConfig);
 
+    const prefersReducedMotion = useReducedMotion();
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+
     // Fade blob as user scrolls down
     const { scrollY } = useScroll();
     const blobOpacity = useTransform(scrollY, [0, 600], [0.6, 0.15]);
 
     useEffect(() => {
         setMounted(true);
+
+        // Detect coarse pointers (touch screens / mobile)
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            setIsTouchDevice(true);
+            return; // don't attach mouse listener at all
+        }
 
         const handleMouseMove = (e: MouseEvent) => {
             // Center the blob on the cursor (-300px because the blob is 600x600)
@@ -32,7 +41,8 @@ export default function MouseBlob() {
         };
     }, [mouseX, mouseY]);
 
-    if (!mounted) return null;
+    // Fast exit: if not mounted, or if accessibility/device restrictions apply
+    if (!mounted || prefersReducedMotion || isTouchDevice) return null;
 
     return (
         <motion.div
