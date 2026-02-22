@@ -528,6 +528,41 @@ nav {
   color: #e2e8f0;
 }
 
+@media (max-width: 767px) {
+  .markdown-content code {
+    font-size: 0.82em;
+  }
+
+  .markdown-content pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+  }
+
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4 {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .markdown-content blockquote {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.25rem;
+  }
+
+  .markdown-content p {
+    margin-bottom: var(--space-2);
+  }
+}
+
 /* Post Header Specific */
 .post-header {
   margin-bottom: var(--space-5);
@@ -986,6 +1021,32 @@ footer p {
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid var(--glass-border);
+}
+
+@media (max-width: 767px) {
+  .code-block-container {
+    border-radius: 6px;
+    margin-bottom: 1.25rem;
+  }
+
+  .code-block-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .code-block-mac-dots {
+    display: none;
+  }
+
+  .code-block-language {
+    position: static;
+    transform: none;
+    font-size: 0.65rem;
+  }
+
+  .code-block-container pre {
+    padding: 0.75rem !important;
+    font-size: 0.78rem !important;
+  }
 }
 
 .code-block-mac-dots {
