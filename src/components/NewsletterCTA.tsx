@@ -11,8 +11,8 @@ export default function NewsletterCTA() {
             viewport={{ once: true, margin: '-10% 0px' }}
             transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
             style={{
-                marginTop: 'var(--space-6)',
-                padding: 'var(--space-5) var(--space-4)',
+                marginTop: 'var(--space-4)',
+                padding: 'var(--space-4) var(--space-3)',
                 textAlign: 'center',
                 borderTop: '1px solid var(--glass-border)',
                 background: 'linear-gradient(180deg, transparent 0%, rgba(20,20,20,0.3) 100%)',
