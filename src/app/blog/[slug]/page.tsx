@@ -1,3 +1,4 @@
+import GithubSlugger from 'github-slugger';
 import { getAllPosts, getPostBySlug } from '@/lib/markdown';
 import NewsletterCTA from '@/components/NewsletterCTA';
 import ReactMarkdown from 'react-markdown';
@@ -16,16 +17,6 @@ export async function generateStaticParams() {
 }
 
 import CodeBlock from '@/components/CodeBlock';
-
-// Helper to generate a slug from plain text identical to rehypeSlug
-function slugify(text: string) {
-    return text
-        .toLowerCase()
-        .replace(/[^a-z0-9 -]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
-}
-
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
     const post = getPostBySlug(resolvedParams.slug);
@@ -35,12 +26,13 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     }
 
     // Extract H2 and H3 headings for the TOC
+    const slugger = new GithubSlugger();
     const headingLines = post.content.split('\n').filter((line) => line.match(/^#{2,3}\s/));
     const headings: Heading[] = headingLines.map((line) => {
         const level = line.startsWith('###') ? 3 : 2;
         const text = line.replace(/^#+\s/, '').trim();
         return {
-            id: slugify(text),
+            id: slugger.slug(text),
             text,
             level,
         };
