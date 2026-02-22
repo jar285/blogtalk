@@ -17,6 +17,7 @@ export async function generateStaticParams() {
 }
 
 import CodeBlock from '@/components/CodeBlock';
+import CopyableHeading from '@/components/CopyableHeading';
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
     const post = getPostBySlug(resolvedParams.slug);
@@ -77,6 +78,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                                     </code>
                                 );
                             },
+                            h2: ({ node, ...props }) => <CopyableHeading level={2} {...props} />,
+                            h3: ({ node, ...props }) => <CopyableHeading level={3} {...props} />,
                         }}
                     >
                         {post.content}

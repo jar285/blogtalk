@@ -384,6 +384,36 @@ nav {
   margin: 0 auto;
 }
 
+.copyable-heading {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.heading-anchor {
+  opacity: 0;
+  margin-left: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
+  transform: translateX(-10px);
+}
+
+.copyable-heading:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.heading-anchor:hover {
+  color: var(--accent-color);
+}
+
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
