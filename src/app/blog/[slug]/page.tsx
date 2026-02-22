@@ -67,13 +67,28 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
                         components={{
+                            pre({ children }: any) {
+                                return <>{children}</>;
+                            },
                             code({ node, inline, className, children, ...props }: any) {
                                 const match = /language-(\w+)/.exec(className || '');
-                                return !inline && match ? (
-                                    <CodeBlock className={className} {...props}>
-                                        {children}
-                                    </CodeBlock>
-                                ) : (
+                                if (!inline && match) {
+                                    return (
+                                        <CodeBlock className={className} {...props}>
+                                            {children}
+                                        </CodeBlock>
+                                    );
+                                }
+                                if (!inline) {
+                                    return (
+                                        <pre className="markdown-pre">
+                                            <code className={className} {...props}>
+                                                {children}
+                                            </code>
+                                        </pre>
+                                    );
+                                }
+                                return (
                                     <code className={className} {...props}>
                                         {children}
                                     </code>
