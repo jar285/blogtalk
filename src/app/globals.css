@@ -218,11 +218,19 @@ main {
 
 /* Nav */
 nav {
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--glass-border);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  nav {
+    padding: 2rem 0;
+  }
 }
 
 .logo {
@@ -234,7 +242,15 @@ nav {
 
 .nav-links {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    gap: 2rem;
+  }
 }
 
 .nav-links a {
@@ -500,7 +516,7 @@ nav {
 }
 
 .post-header h1 {
-  font-size: 3rem;
+  font-size: var(--fs-h1);
   font-weight: 800;
   margin-bottom: 1rem;
   color: #fff;
@@ -514,6 +530,7 @@ nav {
   justify-content: center;
   gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 /* Archive List View */
