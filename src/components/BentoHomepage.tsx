@@ -2,7 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { ArrowRight, Github, Instagram, Linkedin, Mail } from 'lucide-react';
 
 interface PostData {
     slug: string;
@@ -97,13 +97,13 @@ export default function BentoHomepage({ latestPost }: BentoHomepageProps) {
                         <a href="https://github.com/jar285" target="_blank" rel="noopener noreferrer" className="bento-link" style={{ color: 'var(--text-primary)' }}>
                             <Github size={24} />
                         </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bento-link" style={{ color: 'var(--text-primary)' }}>
-                            <Twitter size={24} />
+                        <a href="https://www.instagram.com/jesus_rosarioav/" target="_blank" rel="noopener noreferrer" className="bento-link" style={{ color: 'var(--text-primary)' }}>
+                            <Instagram size={24} />
                         </a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="bento-link" style={{ color: 'var(--text-primary)' }}>
+                        <a href="https://www.linkedin.com/in/jesus-adonis-rosario-vargas-371508255" target="_blank" rel="noopener noreferrer" className="bento-link" style={{ color: 'var(--text-primary)' }}>
                             <Linkedin size={24} />
                         </a>
-                        <a href="mailto:hello@example.com" className="bento-link" style={{ color: 'var(--text-primary)' }}>
+                        <a href="mailto:jar285@njit.edu" className="bento-link" style={{ color: 'var(--text-primary)' }}>
                             <Mail size={24} />
                         </a>
                     </div>
