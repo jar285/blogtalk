@@ -94,7 +94,9 @@ footer,
 .bento-card,
 .cmdk-overlay,
 .cmdk-dialog {
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  transition: background-color var(--motion-duration-slow) var(--motion-ease-out),
+    color var(--motion-duration-slow) var(--motion-ease-out),
+    border-color var(--motion-duration-slow) var(--motion-ease-out);
 }
 
 :root {
@@ -106,7 +108,19 @@ footer,
   --glass-bg: rgba(20, 20, 20, 0.7);
   --glass-border: rgba(255, 255, 255, 0.08);
   --radius: 16px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Motion Tokens: Durations */
+  --motion-duration-fast: 150ms;
+  --motion-duration-base: 250ms;
+  --motion-duration-slow: 400ms;
+
+  /* Motion Tokens: Easing Curves */
+  --motion-ease-out: cubic-bezier(0.25, 0.4, 0.25, 1);
+  --motion-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --motion-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Unified Defaults */
+  --transition: all var(--motion-duration-base) var(--motion-ease-out);
 
   /* Fluid Type Scale (mobile → desktop) */
   --fs-hero: clamp(2.5rem, 6vw, 4rem);
@@ -647,7 +661,7 @@ footer {
   font-size: 0.95rem;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
 }
 
 .cmdk-dialog [cmdk-item][aria-selected="true"] {
@@ -727,7 +741,7 @@ footer {
 .toc-link {
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: color var(--motion-duration-fast) var(--motion-ease-out);
   display: block;
   position: relative;
 }
@@ -820,7 +834,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  transition: color var(--motion-duration-fast) var(--motion-ease-out);
   padding: 0.2rem;
 }
 
@@ -854,7 +868,7 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: all var(--motion-duration-base) var(--motion-ease-spring);
   position: relative;
   overflow: hidden;
 }
@@ -931,7 +945,7 @@ footer {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: color 0.2s ease;
+  transition: color var(--motion-duration-fast) var(--motion-ease-out);
 }
 
 .bento-link:hover {
