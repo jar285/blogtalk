@@ -44,6 +44,11 @@
   color: #1a1a1a;
 }
 
+[data-theme="light"] .post-header .post-tags .tag {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
 [data-theme="light"] .cmdk-trigger {
   background: rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.1);
@@ -134,7 +139,7 @@ footer,
 
   /* Fluid Type Scale (mobile → desktop) */
   --fs-hero: clamp(2.5rem, 6vw, 4rem);
-  --fs-h1: clamp(2rem, 5vw, 3.5rem);
+  --fs-h1: clamp(1.625rem, 4.5vw, 3rem);
   --fs-h2: clamp(1.5rem, 3vw, 2rem);
   --fs-h3: clamp(1.15rem, 2vw, 1.35rem);
   --fs-body: clamp(1.05rem, 1.5vw, 1.15rem);
@@ -517,19 +522,19 @@ nav {
 
 /* Post Header Specific */
 .post-header {
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-1);
   text-align: left;
 }
 
 .post-header h1 {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: var(--fs-h1);
   font-weight: 800;
   margin: 0;
-  color: #fff;
-  line-height: 1.15;
+  color: var(--text-primary);
+  line-height: 1.25;
   text-wrap: balance;
 }
 
@@ -574,13 +579,49 @@ nav {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-secondary);
   white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Mobile Article Header — cohesive editorial module */
+@media (max-width: 767px) {
+  .post-header {
+    gap: var(--space-1);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .post-header .meta {
+    font-size: 0.8rem;
+    gap: 0.35rem;
+    letter-spacing: 0.5px;
+  }
+
+  .post-header .post-tags {
+    gap: 0.35rem;
+    margin-top: 0;
+    padding-bottom: 0.25rem;
+  }
+
+  .post-header .post-tags .tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* Article wrapper */
+.post-article {
+  padding: var(--space-4) 0;
 }
 
 @media (min-width: 768px) {
   .post-header {
     text-align: center;
     align-items: center;
-    margin-bottom: 4rem;
+    margin-bottom: var(--space-6);
   }
 
   .post-header .post-tags {
@@ -703,6 +744,7 @@ nav {
 footer {
   text-align: center;
   padding: 3rem 0;
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
   color: var(--text-secondary);
   border-top: 1px solid var(--glass-border);
   margin-top: 4rem;

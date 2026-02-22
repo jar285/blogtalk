@@ -40,7 +40,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     });
 
     return (
-        <article style={{ padding: '2rem 0', maxWidth: '1200px', margin: '0 auto' }}>
+        <article className="post-article">
             <header className="post-header">
                 <h1>{post.title}</h1>
                 <div className="meta">
