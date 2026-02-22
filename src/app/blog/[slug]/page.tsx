@@ -41,23 +41,24 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
 
     return (
         <article style={{ padding: '2rem 0', maxWidth: '1200px', margin: '0 auto' }}>
-            <header className="post-header" style={{ maxWidth: '800px', margin: '0 auto 3rem auto' }}>
+            <header className="post-header">
                 <h1>{post.title}</h1>
                 <div className="meta">
-                    <span style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.85rem' }}>
+                    <span className="meta-date">
                         {post.date}
                     </span>
-                    <span style={{ opacity: 0.5 }}>&middot;</span>
-                    <span style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.85rem', color: '#d97706' }}>
+                    <span className="meta-divider">&middot;</span>
+                    <span className="meta-read-time">
                         {post.readingTime}
                     </span>
-                    <span style={{ opacity: 0.5 }}>&middot;</span>
-                    <div className="tags" style={{ marginTop: 0 }}>
+                </div>
+                {post.tags && post.tags.length > 0 && (
+                    <div className="tags post-tags">
                         {post.tags.map((tag) => (
                             <span key={tag} className="tag">{tag}</span>
                         ))}
                     </div>
-                </div>
+                )}
             </header>
 
             <div className="post-layout">

@@ -137,7 +137,7 @@ footer,
   --fs-h1: clamp(2rem, 5vw, 3.5rem);
   --fs-h2: clamp(1.5rem, 3vw, 2rem);
   --fs-h3: clamp(1.15rem, 2vw, 1.35rem);
-  --fs-body: clamp(1rem, 1.2vw, 1.05rem);
+  --fs-body: clamp(1.05rem, 1.5vw, 1.15rem);
   --fs-tagline: clamp(1.1rem, 2.5vw, 1.5rem);
   --fs-small: clamp(0.8rem, 1vw, 0.875rem);
 
@@ -208,7 +208,13 @@ a:hover {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
 
 main {
@@ -512,25 +518,76 @@ nav {
 /* Post Header Specific */
 .post-header {
   margin-bottom: 3rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
 }
 
 .post-header h1 {
-  font-size: var(--fs-h1);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin: 0;
   color: #fff;
-  line-height: 1.2;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 .post-header .meta {
   color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  align-items: center;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.post-header .meta-read-time {
+  color: #d97706;
+}
+
+.post-header .meta-divider {
+  opacity: 0.5;
+}
+
+.post-header .post-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  /* Horizontal scroll on mobile */
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.post-header .post-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.post-header .post-tags .tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .post-header {
+    text-align: center;
+    align-items: center;
+    margin-bottom: 4rem;
+  }
+
+  .post-header .post-tags {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
 }
 
 /* Archive List View */
