@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -15,6 +15,12 @@ import NavBar from "@/components/NavBar";
 
 import { getAllPosts } from '@/lib/markdown';
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
+
 export const metadata: Metadata = {
   title: "Jesus's Blog",
   description: "A personal space for thoughts, code, and design.",
@@ -30,9 +36,6 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={inter.variable}>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-      </head>
       <body>
         <ProgressBar />
         <MouseBlob />
