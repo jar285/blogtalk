@@ -154,6 +154,24 @@ footer,
   padding: 0;
 }
 
+*:focus {
+  outline: none;
+  /* Turn off browser default ugly rings if clicked by mouse */
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.bento-card:focus-visible,
+.glass-card:focus-visible,
+.post-card:focus-visible {
+  outline-offset: 8px;
+  border-radius: var(--radius);
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
