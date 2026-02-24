@@ -1,18 +1,35 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Check, Copy, WrapText, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const COLLAPSE_THRESHOLD = 500; // px — blocks taller than this collapse by default
 
 export default function CodeBlock({ children, className }: any) {
     const [copied, setCopied] = useState(false);
+    const [wrapped, setWrapped] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
+    const [isCollapsible, setIsCollapsible] = useState(false);
     const codeRef = useRef<HTMLPreElement>(null);
+    const preWrapperRef = useRef<HTMLDivElement>(null);
 
     // Extract the language from the className (e.g., "language-python")
     const match = /language-(\w+)/.exec(className || '');
     const language = match ? match[1] : 'text';
 
-    const handleCopy = async () => {
+    // Measure the code block height after mount to decide if it should be collapsible
+    useEffect(() => {
+        if (preWrapperRef.current) {
+            const scrollHeight = preWrapperRef.current.scrollHeight;
+            if (scrollHeight > COLLAPSE_THRESHOLD) {
+                setIsCollapsible(true);
+                setCollapsed(true);
+            }
+        }
+    }, []);
+
+    const handleCopy = useCallback(async () => {
         if (codeRef.current) {
             const text = codeRef.current.textContent || '';
             try {
@@ -23,10 +40,13 @@ export default function CodeBlock({ children, className }: any) {
                 console.error('Failed to copy text', err);
             }
         }
-    };
+    }, []);
+
+    const toggleWrap = useCallback(() => setWrapped(w => !w), []);
+    const toggleCollapse = useCallback(() => setCollapsed(c => !c), []);
 
     return (
-        <div className="code-block-container">
+        <div className={`code-block-container${collapsed ? ' code-block-collapsed' : ''}`}>
             <div className="code-block-header">
                 <div className="code-block-mac-dots">
                     <div className="mac-dot close" />
@@ -38,19 +58,55 @@ export default function CodeBlock({ children, className }: any) {
                     {language}
                 </div>
 
-                <button
-                    onClick={handleCopy}
-                    className="code-block-copy"
-                    aria-label="Copy code"
-                    title="Copy code"
-                >
-                    {copied ? <Check size={14} className="copied-icon" /> : <Copy size={14} />}
-                </button>
+                <div className="code-block-actions">
+                    <button
+                        onClick={toggleWrap}
+                        className={`code-block-btn${wrapped ? ' active' : ''}`}
+                        aria-label={wrapped ? 'Disable word wrap' : 'Enable word wrap'}
+                        title={wrapped ? 'Unwrap lines' : 'Wrap lines'}
+                    >
+                        <WrapText size={14} />
+                    </button>
+
+                    <button
+                        onClick={handleCopy}
+                        className="code-block-btn"
+                        aria-label="Copy code"
+                        title="Copy code"
+                    >
+                        {copied ? <Check size={14} className="copied-icon" /> : <Copy size={14} />}
+                    </button>
+                </div>
             </div>
 
-            <pre className={className} ref={codeRef}>
-                <code>{children}</code>
-            </pre>
+            <div
+                ref={preWrapperRef}
+                className={`code-block-body${wrapped ? ' code-wrapped' : ''}`}
+            >
+                <pre className={className} ref={codeRef}>
+                    <code>{children}</code>
+                </pre>
+            </div>
+
+            {isCollapsible && (
+                <button
+                    className="code-block-expander"
+                    onClick={toggleCollapse}
+                    aria-label={collapsed ? 'Expand code block' : 'Collapse code block'}
+                >
+                    {collapsed ? (
+                        <>
+                            <ChevronDown size={14} />
+                            <span>Show more</span>
+                        </>
+                    ) : (
+                        <>
+                            <ChevronUp size={14} />
+                            <span>Show less</span>
+                        </>
+                    )}
+                </button>
+            )}
 
             {/* Global Fixed Toast for Copy Status */}
             <AnimatePresence>

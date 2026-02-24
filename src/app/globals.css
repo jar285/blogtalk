@@ -1087,7 +1087,14 @@ footer p {
   letter-spacing: 1px;
 }
 
-.code-block-copy {
+/* Actions group (wrap + copy buttons) */
+.code-block-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.code-block-btn {
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -1095,12 +1102,84 @@ footer p {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color var(--motion-duration-fast) var(--motion-ease-out);
-  padding: 0.2rem;
+  transition: color var(--motion-duration-fast) var(--motion-ease-out),
+              background var(--motion-duration-fast) var(--motion-ease-out);
+  padding: 0.3rem;
+  border-radius: 4px;
 }
 
-.code-block-copy:hover {
+.code-block-btn:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.code-block-btn.active {
+  color: var(--accent-color);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.code-block-btn.active:hover {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+/* Code body wrapper — handles wrap & collapse */
+.code-block-body {
+  overflow: auto;
+  transition: max-height var(--motion-duration-slow) var(--motion-ease-out);
+}
+
+.code-wrapped pre {
+  white-space: pre-wrap !important;
+  word-break: break-word;
+}
+
+/* Collapsed state */
+.code-block-collapsed .code-block-body {
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.code-block-collapsed .code-block-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, #111);
+  pointer-events: none;
+}
+
+/* Expand/collapse button */
+.code-block-expander {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--motion-duration-fast) var(--motion-ease-out),
+              background var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.code-block-expander:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Reduced motion: instant height transitions */
+@media (prefers-reduced-motion: reduce) {
+  .code-block-body {
+    transition: none;
+  }
 }
 
 .copied-icon {
