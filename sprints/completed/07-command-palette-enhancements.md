@@ -15,10 +15,10 @@
   - Lock document body scrolling while the modal is open.
 
 ## Acceptance Criteria
-- [ ] OS-aware shortcut hint properly displays `⌘K` or `CtrlK`.
-- [ ] "Actions" are available inside the modal (Theme Toggle, Copy Link, etc.).
-- [ ] Focus is strictly trapped within the Command Palette while open.
-- [ ] Background body is locked (no double scrollbars).
+- [x] OS-aware shortcut hint properly displays `⌘K` or `Ctrl+K`.
+- [x] "Actions" are available inside the modal (Theme Toggle, Copy Link, Jump to Newsletter).
+- [x] Focus is strictly trapped within the Command Palette while open.
+- [x] Background body is locked (no double scrollbars).
 
 ## A11y & Motion Rules
 - `prefers-reduced-motion: reduce` makes the modal entrance instantaneous rather than a blur/scale fade-in.
