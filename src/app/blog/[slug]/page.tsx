@@ -1,6 +1,8 @@
 import GithubSlugger from 'github-slugger';
-import { getAllPosts, getPostBySlug } from '@/lib/markdown';
+import { getAllPosts, getPostBySlug, getAdjacentPosts, getRelatedPosts } from '@/lib/markdown';
 import NewsletterCTA from '@/components/NewsletterCTA';
+import RelatedPosts from '@/components/RelatedPosts';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -8,6 +10,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import { notFound } from 'next/navigation';
 import TableOfContents, { Heading } from '@/components/TableOfContents';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export async function generateStaticParams() {
     const posts = getAllPosts();
@@ -38,6 +41,9 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
             level,
         };
     });
+
+    const { next, prev } = getAdjacentPosts(resolvedParams.slug);
+    const relatedPosts = getRelatedPosts(resolvedParams.slug, post.tags, 3);
 
     return (
         <article className="post-article">
@@ -100,7 +106,32 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     >
                         {post.content}
                     </ReactMarkdown>
+
                     <NewsletterCTA />
+
+                    {/* Next / Previous navigation */}
+                    <nav className="post-nav" aria-label="Post navigation">
+                        {prev ? (
+                            <Link href={`/blog/${prev.slug}`} className="post-nav-link post-nav-prev">
+                                <ArrowLeft size={18} />
+                                <div className="post-nav-text">
+                                    <span className="post-nav-label">Previous</span>
+                                    <span className="post-nav-title">{prev.title}</span>
+                                </div>
+                            </Link>
+                        ) : <div />}
+                        {next ? (
+                            <Link href={`/blog/${next.slug}`} className="post-nav-link post-nav-next">
+                                <div className="post-nav-text">
+                                    <span className="post-nav-label">Next</span>
+                                    <span className="post-nav-title">{next.title}</span>
+                                </div>
+                                <ArrowRight size={18} />
+                            </Link>
+                        ) : <div />}
+                    </nav>
+
+                    <RelatedPosts posts={relatedPosts} />
                 </div>
 
                 <aside className="post-sidebar">

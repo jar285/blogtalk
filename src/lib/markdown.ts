@@ -98,3 +98,52 @@ export function getPostBySlug(slug: string): PostData | null {
         return null;
     }
 }
+
+/**
+ * Get the next and previous posts relative to the given slug.
+ * Posts are sorted newest-first, so "next" = newer, "prev" = older.
+ */
+export function getAdjacentPosts(slug: string): {
+    next: Omit<PostData, 'content'> | null;
+    prev: Omit<PostData, 'content'> | null;
+} {
+    const posts = getAllPosts(); // sorted newest-first
+    const idx = posts.findIndex((p) => p.slug === slug);
+    if (idx === -1) return { next: null, prev: null };
+
+    return {
+        next: idx > 0 ? posts[idx - 1] : null,          // newer post
+        prev: idx < posts.length - 1 ? posts[idx + 1] : null,  // older post
+    };
+}
+
+/**
+ * Find up to `limit` related posts by tag overlap, excluding the current slug.
+ * Scored by number of shared tags, then by date (newest first).
+ */
+export function getRelatedPosts(
+    slug: string,
+    tags: string[],
+    limit: number = 3
+): Omit<PostData, 'content'>[] {
+    if (!tags || tags.length === 0) return [];
+
+    const posts = getAllPosts();
+    const tagSet = new Set(tags.map((t) => t.toLowerCase()));
+
+    const scored = posts
+        .filter((p) => p.slug !== slug)
+        .map((p) => {
+            const overlap = (p.tags || []).filter((t) =>
+                tagSet.has(t.toLowerCase())
+            ).length;
+            return { post: p, overlap };
+        })
+        .filter((s) => s.overlap > 0)
+        .sort((a, b) => {
+            if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+            return b.post.date.localeCompare(a.post.date);
+        });
+
+    return scored.slice(0, limit).map((s) => s.post);
+}

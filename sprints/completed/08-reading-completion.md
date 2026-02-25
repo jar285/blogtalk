@@ -14,9 +14,9 @@
   - Pass this computed data into the static build loop in the dynamic route.
 
 ## Acceptance Criteria
-- [ ] Every blog post displays "Next / Previous" navigation at the footer.
-- [ ] Up to three "Related Posts" cards are displayed if suitable overlaps exist.
-- [ ] All reading progression logic is statically generated at build time (`generateStaticParams`). No runtime fetching.
+- [x] Every blog post displays "Next / Previous" navigation at the footer.
+- [x] Up to three "Related Posts" cards are displayed if suitable overlaps exist.
+- [x] All reading progression logic is statically generated at build time (`generateStaticParams`). No runtime fetching.
 
 ## A11y & Motion Rules
 - The next/prev link hitboxes must be large and accessible (minimum 44x44px target sizes).
