@@ -13,10 +13,10 @@
   - Simulate a 1-second network delay before returning a mocked `success` state for visual effect.
 
 ## Acceptance Criteria
-- [ ] Browser `alert()` is removed.
-- [ ] Inputs are fully labeled and structurally accessible to screen readers.
-- [ ] The submit button animates to a loader state dynamically.
-- [ ] The component gracefully transitions to a permanent "Thanks for subscribing!" UI block on success.
+- [x] Browser `alert()` is removed.
+- [x] Inputs are fully labeled and structurally accessible to screen readers.
+- [x] The submit button animates to a loader state dynamically.
+- [x] The component gracefully transitions to a permanent "Thanks for subscribing!" UI block on success.
 
 ## A11y & Motion Rules
 - Network-loading spinners generally should not animate under `prefers-reduced-motion` but the status transition text must still correctly render.

@@ -1,8 +1,28 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle, Loader2 } from 'lucide-react';
+
+type FormState = 'idle' | 'loading' | 'success' | 'error';
 
 export default function NewsletterCTA() {
+    const [state, setState] = useState<FormState>('idle');
+    const [email, setEmail] = useState('');
+
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (state === 'loading' || state === 'success') return;
+
+        setState('loading');
+
+        // Simulate a 1-second network delay
+        await new Promise((r) => setTimeout(r, 1000));
+
+        // Mock success — swap for real API later
+        setState('success');
+    }, [state]);
+
     return (
         <motion.div
             className="newsletter-cta glass-card"
@@ -10,85 +30,80 @@ export default function NewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10% 0px' }}
             transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-            style={{
-                marginTop: 'var(--space-4)',
-                padding: 'var(--space-4) var(--space-3)',
-                textAlign: 'center',
-                borderTop: '1px solid var(--glass-border)',
-                background: 'linear-gradient(180deg, transparent 0%, rgba(20,20,20,0.3) 100%)',
-            }}
         >
-            <h3 style={{
-                fontSize: 'var(--fs-h2)',
-                fontWeight: 700,
-                marginBottom: 'var(--space-2)',
-                letterSpacing: '-0.02em',
-                color: 'var(--text-primary)'
-            }}>
-                Enjoyed this post?
-            </h3>
-            <p style={{
-                fontSize: 'var(--fs-body)',
-                color: 'var(--text-secondary)',
-                marginBottom: 'var(--space-4)',
-                maxWidth: '500px',
-                margin: '0 auto var(--space-4)'
-            }}>
-                I occasionally send out essays on software design, performance, and the aesthetics of code. No spam, ever.
-            </p>
+            <AnimatePresence mode="wait">
+                {state === 'success' ? (
+                    <motion.div
+                        key="success"
+                        className="newsletter-success"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <CheckCircle size={36} className="newsletter-success-icon" />
+                        <h3 className="newsletter-heading">
+                            Thanks for subscribing!
+                        </h3>
+                        <p className="newsletter-desc">
+                            You&rsquo;ll hear from me when the next essay drops. No spam, ever.
+                        </p>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="form"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <h3 className="newsletter-heading">
+                            Enjoyed this post?
+                        </h3>
+                        <p className="newsletter-desc">
+                            I occasionally send out essays on software design, performance, and the aesthetics of code. No spam, ever.
+                        </p>
 
-            <form
-                className="newsletter-form"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    // Future backend integration
-                    alert("Thanks for subscribing! (This is a demo frontend)");
-                }}
-                style={{
-                    display: 'flex',
-                    gap: 'var(--space-2)',
-                    maxWidth: '400px',
-                    margin: '0 auto',
-                    position: 'relative'
-                }}
-            >
-                <input
-                    type="email"
-                    placeholder="name@example.com"
-                    required
-                    style={{
-                        flex: 1,
-                        padding: '0.75rem 1rem',
-                        borderRadius: '8px',
-                        border: '1px solid var(--glass-border)',
-                        background: 'rgba(0,0,0,0.2)',
-                        color: 'var(--text-primary)',
-                        fontSize: '1rem',
-                        outline: 'none',
-                        transition: 'border-color 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'var(--accent-color)'}
-                    onBlur={(e) => e.target.style.borderColor = 'var(--glass-border)'}
-                />
-                <button
-                    type="submit"
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: 'var(--text-primary)',
-                        color: 'var(--bg-color)',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'var(--transition)',
-                        fontSize: '1rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                    Subscribe
-                </button>
-            </form>
+                        <form
+                            className="newsletter-form"
+                            onSubmit={handleSubmit}
+                        >
+                            <label htmlFor="newsletter-email" className="sr-only">
+                                Email address
+                            </label>
+                            <input
+                                id="newsletter-email"
+                                type="email"
+                                placeholder="name@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={state === 'loading'}
+                                className="newsletter-input"
+                                autoComplete="email"
+                            />
+                            <button
+                                type="submit"
+                                disabled={state === 'loading'}
+                                className={`newsletter-btn${state === 'loading' ? ' newsletter-btn-loading' : ''}`}
+                            >
+                                {state === 'loading' ? (
+                                    <>
+                                        <Loader2 size={16} className="newsletter-spinner" />
+                                        Subscribing…
+                                    </>
+                                ) : (
+                                    'Subscribe'
+                                )}
+                            </button>
+                        </form>
+
+                        {state === 'error' && (
+                            <p className="newsletter-error" role="alert">
+                                Something went wrong. Please try again.
+                            </p>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }
