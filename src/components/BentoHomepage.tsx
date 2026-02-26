@@ -2,6 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Github, Instagram, Linkedin, Mail } from 'lucide-react';
 
 interface PostData {
@@ -18,6 +19,7 @@ interface BentoHomepageProps {
 }
 
 export default function BentoHomepage({ latestPost }: BentoHomepageProps) {
+    const router = useRouter();
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
         show: {
@@ -56,7 +58,26 @@ export default function BentoHomepage({ latestPost }: BentoHomepageProps) {
                         <p>{latestPost.excerpt}</p>
                         <div className="bento-tech">
                             {latestPost.tags.map((tag) => (
-                                <span key={tag} className="tech-badge">{tag}</span>
+                                <span
+                                    key={tag}
+                                    className="tech-badge tag-link"
+                                    role="link"
+                                    tabIndex={0}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        router.push(`/tags/${tag.toLowerCase()}`);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            router.push(`/tags/${tag.toLowerCase()}`);
+                                        }
+                                    }}
+                                >
+                                    {tag}
+                                </span>
                             ))}
                         </div>
                     </div>

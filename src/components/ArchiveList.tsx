@@ -2,6 +2,7 @@
 
 import { PostData } from '@/lib/markdown';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, Variants } from 'framer-motion';
 
 function formatFullDate(dateString: string) {
@@ -10,6 +11,7 @@ function formatFullDate(dateString: string) {
 }
 
 export default function ArchiveList({ posts }: { posts: Omit<PostData, 'content'>[] }) {
+    const router = useRouter();
     // Fade-in animation for the list container
     const container: Variants = {
         hidden: { opacity: 0 },
@@ -54,7 +56,26 @@ export default function ArchiveList({ posts }: { posts: Omit<PostData, 'content'
                                 <motion.h3 layoutId={`post-title-${post.slug}`}>{post.title}</motion.h3>
                                 <div className="tags">
                                     {post.tags.map((tag) => (
-                                        <span key={tag} className="tag">{tag.toUpperCase()}</span>
+                                        <span
+                                            key={tag}
+                                            className="tag tag-link"
+                                            role="link"
+                                            tabIndex={0}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                router.push(`/tags/${tag.toLowerCase()}`);
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    router.push(`/tags/${tag.toLowerCase()}`);
+                                                }
+                                            }}
+                                        >
+                                            {tag.toUpperCase()}
+                                        </span>
                                     ))}
                                 </div>
                             </div>

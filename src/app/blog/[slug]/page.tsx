@@ -61,7 +61,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                 {post.tags && post.tags.length > 0 && (
                     <div className="tags post-tags">
                         {post.tags.map((tag) => (
-                            <span key={tag} className="tag">{tag}</span>
+                            <Link key={tag} href={`/tags/${tag.toLowerCase()}`} className="tag tag-link">{tag}</Link>
                         ))}
                     </div>
                 )}

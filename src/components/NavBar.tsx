@@ -30,6 +30,9 @@ export default function NavBar() {
                     <Link href="/blog">Articles</Link>
                 </MagneticElement>
                 <MagneticElement strength={0.25}>
+                    <Link href="/tags">Tags</Link>
+                </MagneticElement>
+                <MagneticElement strength={0.25}>
                     <Link href="/projects">Projects</Link>
                 </MagneticElement>
                 <MagneticElement strength={0.2}>

@@ -14,10 +14,10 @@
   - Update any hardcoded `<span>` tags to `<Link>` components pointing to the new routes.
 
 ## Acceptance Criteria
-- [ ] `/tags` index page exists and lists all tags with their respective post counts.
-- [ ] Specific tag listing pages (`/tags/[tag]`) correctly load the corresponding filtered subset of posts.
-- [ ] Tag chips anywhere across the site are clickable and correctly mapped.
-- [ ] Statically generated at build time.
+- [x] `/tags` index page exists and lists all tags with their respective post counts.
+- [x] Specific tag listing pages (`/tags/[tag]`) correctly load the corresponding filtered subset of posts.
+- [x] Tag chips anywhere across the site are clickable and correctly mapped.
+- [x] Statically generated at build time.
 
 ## A11y & Motion Rules
 - Focus outlines must envelope the entire tag chip securely.

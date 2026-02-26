@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, FileText, Home, FolderOpen, TerminalSquare,
-    Sun, Moon, Link2, Mail
+    Sun, Moon, Link2, Mail, Tag
 } from 'lucide-react';
 import { PostData } from '@/lib/markdown';
 
@@ -163,6 +163,10 @@ export default function CommandMenu({ posts }: { posts: Omit<PostData, 'content'
                                     <Command.Item onSelect={() => runCommand(() => router.push('/blog'))}>
                                         <FileText size={16} />
                                         All Articles
+                                    </Command.Item>
+                                    <Command.Item onSelect={() => runCommand(() => router.push('/tags'))}>
+                                        <Tag size={16} />
+                                        Tags
                                     </Command.Item>
                                     <Command.Item onSelect={() => runCommand(() => router.push('/projects'))}>
                                         <FolderOpen size={16} />

@@ -75,6 +75,36 @@ export function getAllPosts(): Omit<PostData, 'content'>[] {
     });
 }
 
+/**
+ * Get all unique tags with their post counts, sorted by count descending.
+ */
+export function getAllTags(): { tag: string; count: number }[] {
+    const posts = getAllPosts();
+    const tagMap = new Map<string, number>();
+
+    for (const post of posts) {
+        for (const tag of post.tags || []) {
+            const lower = tag.toLowerCase();
+            tagMap.set(lower, (tagMap.get(lower) || 0) + 1);
+        }
+    }
+
+    return Array.from(tagMap.entries())
+        .map(([tag, count]) => ({ tag, count }))
+        .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/**
+ * Get all posts matching a specific tag (case-insensitive).
+ */
+export function getPostsByTag(tag: string): Omit<PostData, 'content'>[] {
+    const posts = getAllPosts();
+    const lower = tag.toLowerCase();
+    return posts.filter((p) =>
+        (p.tags || []).some((t) => t.toLowerCase() === lower)
+    );
+}
+
 export function getPostBySlug(slug: string): PostData | null {
     try {
         const fullPath = path.join(postsDir, `${slug}.md`);
