@@ -21,6 +21,7 @@ export async function generateStaticParams() {
 
 import CodeBlock from '@/components/CodeBlock';
 import CopyableHeading from '@/components/CopyableHeading';
+import CommentSection from '@/components/CommentSection';
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
     const post = getPostBySlug(resolvedParams.slug);
@@ -132,6 +133,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     </nav>
 
                     <RelatedPosts posts={relatedPosts} />
+
+                    <CommentSection slug={resolvedParams.slug} />
                 </div>
 
                 <aside className="post-sidebar">
