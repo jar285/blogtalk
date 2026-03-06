@@ -43,6 +43,11 @@ export default function NavBar() {
                         <Link href="/dashboard">Dashboard</Link>
                     </MagneticElement>
                 )}
+                {session?.user?.role === 'admin' && (
+                    <MagneticElement strength={0.25}>
+                        <Link href="/admin">Admin</Link>
+                    </MagneticElement>
+                )}
                 <MagneticElement strength={0.2}>
                     <kbd
                         className="cmdk-trigger"
