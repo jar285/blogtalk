@@ -3,7 +3,7 @@ title: "Decoding System 2 Thinking in Language Models"
 date: "2026-02-23"
 excerpt: "Exploring the mechanisms behind 'Chain of Thought' and how inference-time compute is redefining AI capabilities."
 tags: ["machine-learning", "llms", "engineering"]
-coverImage: "/blogtalk/images/reasoning-models.jpg"
+coverImage: "/images/reasoning-models.jpg"
 ---
 
 If you've interacted with modern generative models recently, you've likely noticed a distinct shift in how they process complex queries. Instead of immediately streaming an answer, the model might display a reasoning trace—a digital equivalent of "thinking out loud."

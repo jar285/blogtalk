@@ -12,6 +12,7 @@ import MouseBlob from "@/components/MouseBlob";
 import CommandMenu from "@/components/CommandMenu";
 import ProgressBar from "@/components/ProgressBar";
 import NavBar from "@/components/NavBar";
+import SessionProvider from "@/components/SessionProvider";
 
 import { getAllPosts } from '@/lib/markdown';
 
@@ -37,20 +38,22 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        <ProgressBar />
-        <MouseBlob />
-        <CommandMenu posts={posts} />
-        <div className="container">
-          <NavBar />
+        <SessionProvider>
+          <ProgressBar />
+          <MouseBlob />
+          <CommandMenu posts={posts} />
+          <div className="container">
+            <NavBar />
 
-          <main>
-            {children}
-          </main>
+            <main>
+              {children}
+            </main>
 
-          <footer>
-            <p>&copy; {new Date().getFullYear()} Jesus Rosario. Built with Next.js & Markdown.</p>
-          </footer>
-        </div>
+            <footer>
+              <p>&copy; {new Date().getFullYear()} Jesus Rosario. Built with Next.js & Markdown.</p>
+            </footer>
+          </div>
+        </SessionProvider>
       </body>
     </html>
   )

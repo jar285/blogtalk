@@ -3,7 +3,7 @@ title: "The File System as a Content API"
 date: "2026-02-20"
 excerpt: "Why we don't need an external CMS, and how Next.js generates our blog using local Markdown files."
 tags: ["nextjs", "architecture", "cms"]
-coverImage: "/blogtalk/images/fs-api.jpg"
+coverImage: "/images/fs-api.jpg"
 ---
 
 When building a blog, one of the first questions you might ask is: **"Which Content Management System (CMS) or Content API should we use?"** Should we use Contentful? Sanity? WordPress?
