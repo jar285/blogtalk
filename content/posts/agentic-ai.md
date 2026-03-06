@@ -3,7 +3,7 @@ title: "The Paradigm Shift: From Conversational AI to Autonomous Agents"
 date: "2026-02-22"
 excerpt: "Why the future of software isn't just chatting with LLMs—it's delegating complex workflows to agentic systems."
 tags: ["artificial-intelligence", "architecture", "agents"]
-coverImage: "/blogtalk/images/agentic-ai.jpg"
+coverImage: "/images/agentic-ai.jpg"
 ---
 
 For the past several years, the tech industry has been fixated on conversational interfaces. The prevailing interaction paradigm was simple: you type a prompt, and the Language Model (LLM) generates a statistically probable response. While powerful, this "oracle" model of AI is fundamentally constrained by constant human intervention.

@@ -1772,3 +1772,134 @@ footer p {
   letter-spacing: 0.5px;
   line-height: 1;
 }
+
+/* ─── Auth Button & Avatar ─────────────────────────────── */
+.auth-skeleton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.auth-button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
+  white-space: nowrap;
+}
+
+.auth-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.auth-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  object-fit: cover;
+}
+
+/* ─── Sign-In Page ─────────────────────────────────────── */
+.sign-in-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.sign-in-card {
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.sign-in-card h1 {
+  font-size: var(--fs-lg);
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.sign-in-card p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: var(--fs-sm);
+}
+
+.google-sign-in-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.75rem;
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
+  width: 100%;
+  justify-content: center;
+}
+
+.google-sign-in-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.google-sign-in-button svg {
+  flex-shrink: 0;
+}
+
+/* Light theme auth overrides */
+[data-theme="light"] .auth-button {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .auth-button:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .auth-skeleton {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .auth-avatar {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .google-sign-in-button {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .google-sign-in-button:hover {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--accent-color);
+}

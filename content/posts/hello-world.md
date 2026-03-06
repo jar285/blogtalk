@@ -3,7 +3,7 @@ title: "Hello World: The Power of Markdown"
 date: "2026-02-20"
 excerpt: "Why I chose Markdown and Next.js for my personal blog, and how statically generated sites are the future."
 tags: ["nextjs", "markdown", "ssg"]
-coverImage: "/blogtalk/images/hello-world.jpg"
+coverImage: "/images/hello-world.jpg"
 ---
 
 Welcome to my first post on **Jesus Blog**!

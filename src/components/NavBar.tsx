@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import MagneticElement from './MagneticElement';
 import ThemeToggle from './ThemeToggle';
+import AuthButton from './AuthButton';
 
 export default function NavBar() {
     const [isMac, setIsMac] = useState(true);
@@ -49,6 +50,7 @@ export default function NavBar() {
                     </kbd>
                 </MagneticElement>
                 <ThemeToggle />
+                <AuthButton />
             </div>
         </nav>
     );
