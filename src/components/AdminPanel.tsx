@@ -9,6 +9,8 @@ interface AdminStats {
   totalComments: number;
   totalLikes: number;
   totalBookmarks: number;
+  totalViews: number;
+  totalSubscribers: number;
   recentUsers: number;
   topLikedSlugs: { slug: string; count: number }[];
   topCommentedSlugs: { slug: string; count: number }[];
@@ -66,7 +68,10 @@ export default function AdminPanel({
   /* ── Fetch stats ──────────────────────────────────────── */
   useEffect(() => {
     fetch('/api/admin/stats')
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Stats fetch failed: ${r.status}`);
+        return r.json();
+      })
       .then(setStats)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -76,7 +81,10 @@ export default function AdminPanel({
   useEffect(() => {
     if (tab === 'users') {
       fetch('/api/admin/users')
-        .then((r) => r.json())
+        .then((r) => {
+          if (!r.ok) throw new Error(`Users fetch failed: ${r.status}`);
+          return r.json();
+        })
         .then(setUsers)
         .catch(console.error);
     }
@@ -85,7 +93,10 @@ export default function AdminPanel({
   /* ── Fetch comments when tab/page changes ─────────────── */
   const fetchComments = useCallback((page: number) => {
     fetch(`/api/admin/comments?page=${page}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Comments fetch failed: ${r.status}`);
+        return r.json();
+      })
       .then((data) => {
         setComments(data.comments);
         setCommentPage(data.page);
