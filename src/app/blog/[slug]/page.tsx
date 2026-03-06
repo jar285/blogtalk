@@ -24,6 +24,7 @@ import CopyableHeading from '@/components/CopyableHeading';
 import CommentSection from '@/components/CommentSection';
 import LikeButton from '@/components/LikeButton';
 import BookmarkButton from '@/components/BookmarkButton';
+import ViewCounter from '@/components/ViewCounter';
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
     const post = getPostBySlug(resolvedParams.slug);
@@ -60,6 +61,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     <span className="meta-read-time">
                         {post.readingTime}
                     </span>
+                    <span className="meta-divider">&middot;</span>
+                    <ViewCounter slug={resolvedParams.slug} />
                 </div>
                 {post.tags && post.tags.length > 0 && (
                     <div className="tags post-tags">

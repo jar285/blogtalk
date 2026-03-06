@@ -16,12 +16,22 @@ export default function NewsletterCTA() {
 
         setState('loading');
 
-        // Simulate a 1-second network delay
-        await new Promise((r) => setTimeout(r, 1000));
+        try {
+            const res = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
 
-        // Mock success — swap for real API later
-        setState('success');
-    }, [state]);
+            if (res.ok) {
+                setState('success');
+            } else {
+                setState('error');
+            }
+        } catch {
+            setState('error');
+        }
+    }, [state, email]);
 
     return (
         <motion.div

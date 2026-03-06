@@ -106,3 +106,21 @@ model Bookmark {
 
   @@unique([slug, userId])
 }
+
+// ─── Sprint 6 models ──────────────────────────────────────
+
+model PostView {
+  id   String @id @default(cuid())
+  slug String
+  
+  createdAt DateTime @default(now())
+
+  @@index([slug])
+}
+
+model Subscriber {
+  id    String @id @default(cuid())
+  email String @unique
+
+  createdAt DateTime @default(now())
+}
