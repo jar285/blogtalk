@@ -22,6 +22,8 @@ export async function generateStaticParams() {
 import CodeBlock from '@/components/CodeBlock';
 import CopyableHeading from '@/components/CopyableHeading';
 import CommentSection from '@/components/CommentSection';
+import LikeButton from '@/components/LikeButton';
+import BookmarkButton from '@/components/BookmarkButton';
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
     const post = getPostBySlug(resolvedParams.slug);
@@ -67,6 +69,11 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                     </div>
                 )}
             </header>
+
+            <div className="post-engagement">
+                <LikeButton slug={resolvedParams.slug} />
+                <BookmarkButton slug={resolvedParams.slug} />
+            </div>
 
             <div className="post-layout">
                 <div className="markdown-content">
