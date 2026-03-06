@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import MagneticElement from './MagneticElement';
 import ThemeToggle from './ThemeToggle';
 import AuthButton from './AuthButton';
 
 export default function NavBar() {
+    const { data: session } = useSession();
     const [isMac, setIsMac] = useState(true);
 
     // Detect OS on client to avoid hydration mismatch
@@ -36,6 +38,11 @@ export default function NavBar() {
                 <MagneticElement strength={0.25}>
                     <Link href="/projects">Projects</Link>
                 </MagneticElement>
+                {session && (
+                    <MagneticElement strength={0.25}>
+                        <Link href="/dashboard">Dashboard</Link>
+                    </MagneticElement>
+                )}
                 <MagneticElement strength={0.2}>
                     <kbd
                         className="cmdk-trigger"
