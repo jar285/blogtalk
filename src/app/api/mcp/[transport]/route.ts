@@ -11,13 +11,21 @@ import { Prisma } from '@prisma/client';
  * returns structured JSON that Claude interprets for the user.
  */
 
-function normalizedAnalyticsFilter(from: Date, to: Date) {
+function normalizedAnalyticsFilter(from: Date, to: Date, strictEventTokens = true) {
+  const eventTokenFilter = strictEventTokens
+    ? Prisma.sql`
+        AND (
+          LOWER(COALESCE("eventType", '')) IN ('pageview', 'page_view', 'view', 'page-view', 'visit')
+          OR LOWER(COALESCE("eventName", '')) IN ('pageview', 'page_view', 'view', 'page-view', 'visit')
+          OR LOWER(COALESCE("raw"->>'eventType', '')) IN ('pageview', 'page_view', 'view', 'page-view', 'visit')
+          OR LOWER(COALESCE("raw"->>'eventName', '')) IN ('pageview', 'page_view', 'view', 'page-view', 'visit')
+        )
+      `
+    : Prisma.sql``;
+
   return Prisma.sql`
     "occurredAt" BETWEEN ${from} AND ${to}
-    AND (
-      LOWER(COALESCE("eventType", '')) IN ('pageview', 'page_view', 'view')
-      OR LOWER(COALESCE("eventName", '')) IN ('pageview', 'page_view', 'view')
-    )
+    ${eventTokenFilter}
     AND (
       "path" = '/'
       OR "path" LIKE '/blog%'
@@ -51,13 +59,22 @@ const handler = createMcpHandler(
       async ({ from, to }) => {
         const fromDate = new Date(from);
         const toDate = new Date(to);
-        const rows = await prisma.$queryRaw<{ count: bigint }[]>`
+
+        let rows = await prisma.$queryRaw<{ count: bigint }[]>`
           SELECT COUNT(*)::bigint AS count
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
         `;
 
-        const count = Number(rows[0]?.count ?? BigInt(0));
+        let count = Number(rows[0]?.count ?? BigInt(0));
+        if (count === 0) {
+          rows = await prisma.$queryRaw<{ count: bigint }[]>`
+            SELECT COUNT(*)::bigint AS count
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+          `;
+          count = Number(rows[0]?.count ?? BigInt(0));
+        }
 
         return {
           content: [
@@ -85,14 +102,25 @@ const handler = createMcpHandler(
         const fromDate = new Date(from);
         const toDate = new Date(to);
 
-        const pages = await prisma.$queryRaw<{ path: string; pageviews: bigint }[]>`
+        let pages = await prisma.$queryRaw<{ path: string; pageviews: bigint }[]>`
           SELECT path, COUNT(*) AS pageviews
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
           GROUP BY path
           ORDER BY pageviews DESC
           LIMIT ${limit}
         `;
+
+        if (pages.length === 0) {
+          pages = await prisma.$queryRaw<{ path: string; pageviews: bigint }[]>`
+            SELECT path, COUNT(*) AS pageviews
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+            GROUP BY path
+            ORDER BY pageviews DESC
+            LIMIT ${limit}
+          `;
+        }
 
         return {
           content: [
@@ -124,18 +152,28 @@ const handler = createMcpHandler(
         const fromDate = new Date(from);
         const toDate = new Date(to);
 
-        const result = await prisma.$queryRaw<{ count: bigint }[]>`
+        let result = await prisma.$queryRaw<{ count: bigint }[]>`
           SELECT COUNT(DISTINCT "sessionId") AS count
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
         `;
+
+        let uniqueSessions = Number(result[0]?.count ?? 0);
+        if (uniqueSessions === 0) {
+          result = await prisma.$queryRaw<{ count: bigint }[]>`
+            SELECT COUNT(DISTINCT "sessionId") AS count
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+          `;
+          uniqueSessions = Number(result[0]?.count ?? 0);
+        }
 
         return {
           content: [
             {
               type: 'text' as const,
               text: JSON.stringify({
-                unique_sessions: Number(result[0]?.count ?? 0),
+                  unique_sessions: uniqueSessions,
                 from,
                 to,
               }),
@@ -163,14 +201,25 @@ const handler = createMcpHandler(
         const fromDate = new Date(from);
         const toDate = new Date(to);
 
-        const sources = await prisma.$queryRaw<{ referrer: string; pageviews: bigint }[]>`
+        let sources = await prisma.$queryRaw<{ referrer: string; pageviews: bigint }[]>`
           SELECT COALESCE(referrer, '(direct)') AS referrer, COUNT(*) AS pageviews
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
           GROUP BY referrer
           ORDER BY pageviews DESC
           LIMIT ${limit}
         `;
+
+        if (sources.length === 0) {
+          sources = await prisma.$queryRaw<{ referrer: string; pageviews: bigint }[]>`
+            SELECT COALESCE(referrer, '(direct)') AS referrer, COUNT(*) AS pageviews
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+            GROUP BY referrer
+            ORDER BY pageviews DESC
+            LIMIT ${limit}
+          `;
+        }
 
         return {
           content: [
@@ -205,13 +254,23 @@ const handler = createMcpHandler(
         const fromDate = new Date(from);
         const toDate = new Date(to);
 
-        const devices = await prisma.$queryRaw<{ device: string; count: bigint }[]>`
+        let devices = await prisma.$queryRaw<{ device: string; count: bigint }[]>`
           SELECT COALESCE(device, 'unknown') AS device, COUNT(*) AS count
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
           GROUP BY device
           ORDER BY count DESC
         `;
+
+        if (devices.length === 0) {
+          devices = await prisma.$queryRaw<{ device: string; count: bigint }[]>`
+            SELECT COALESCE(device, 'unknown') AS device, COUNT(*) AS count
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+            GROUP BY device
+            ORDER BY count DESC
+          `;
+        }
 
         const breakdown: Record<string, number> = {};
         for (const row of devices) {
@@ -243,13 +302,23 @@ const handler = createMcpHandler(
         const fromDate = new Date(from);
         const toDate = new Date(to);
 
-        const trend = await prisma.$queryRaw<{ day: Date; pageviews: bigint }[]>`
+        let trend = await prisma.$queryRaw<{ day: Date; pageviews: bigint }[]>`
           SELECT "occurredAt"::date AS day, COUNT(*) AS pageviews
           FROM "AnalyticsEvent"
-          WHERE ${normalizedAnalyticsFilter(fromDate, toDate)}
+          WHERE ${normalizedAnalyticsFilter(fromDate, toDate, true)}
           GROUP BY day
           ORDER BY day
         `;
+
+        if (trend.length === 0) {
+          trend = await prisma.$queryRaw<{ day: Date; pageviews: bigint }[]>`
+            SELECT "occurredAt"::date AS day, COUNT(*) AS pageviews
+            FROM "AnalyticsEvent"
+            WHERE ${normalizedAnalyticsFilter(fromDate, toDate, false)}
+            GROUP BY day
+            ORDER BY day
+          `;
+        }
 
         return {
           content: [
