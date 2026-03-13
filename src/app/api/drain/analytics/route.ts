@@ -3,24 +3,19 @@ import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 
 /**
- * Drain Receiver — Vercel Web Analytics pushes events here.
+ * Analytics Collector — receives pageview events from the client-side hook.
  *
- * Validates the signing secret, normalises the payload shape,
- * and writes rows to the analytics_events table via Prisma.
+ * Originally designed as a Vercel Drain receiver, repurposed for direct
+ * client-side collection since Drains require the Pro plan.
  *
- * Single responsibility: receive and persist. Nothing else.
+ * Accepts single event objects or arrays. Payload shape matches the
+ * Vercel drain format so the AnalyticsEvent schema and MCP tools
+ * remain untouched.
+ *
+ * Left open (no auth) — it only writes pageview data.
  */
 
-function isValidDrainRequest(req: NextRequest): boolean {
-  const signature = req.headers.get('x-vercel-signature');
-  return signature === process.env.ANALYTICS_DRAIN_SECRET;
-}
-
 export async function POST(req: NextRequest) {
-  if (!isValidDrainRequest(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   let payload: unknown;
   try {
     payload = await req.json();
@@ -28,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // Vercel drains send either a single event object or an array
+  // Accept single event or array
   const events: Record<string, unknown>[] = Array.isArray(payload)
     ? payload
     : [payload];
@@ -60,7 +55,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ received: events.length });
   } catch (error) {
-    console.error('[drain] Insert error:', error);
+    console.error('[analytics] Insert error:', error);
     return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
   }
 }
