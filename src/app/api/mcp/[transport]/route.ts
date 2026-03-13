@@ -26,14 +26,7 @@ function normalizedAnalyticsFilter(from: Date, to: Date, strictEventTokens = tru
   return Prisma.sql`
     "occurredAt" BETWEEN ${from} AND ${to}
     ${eventTokenFilter}
-    AND (
-      "path" = '/'
-      OR "path" LIKE '/blog%'
-      OR "path" LIKE '/posts%'
-      OR "path" LIKE '/projects%'
-      OR "path" LIKE '/tags%'
-      OR "path" LIKE '/search%'
-    )
+    AND COALESCE("path", '') <> ''
     AND "path" NOT LIKE '/api/%'
     AND "path" NOT LIKE '/_next/%'
     AND "path" NOT LIKE '/admin%'
