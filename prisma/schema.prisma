@@ -124,3 +124,25 @@ model Subscriber {
 
   createdAt DateTime @default(now())
 }
+
+// ─── Analytics (drain → MCP pipeline) ─────────────────────
+
+model AnalyticsEvent {
+  id         BigInt   @id @default(autoincrement())
+  eventType  String   // 'pageview' | 'event'
+  eventName  String?  // null for pageviews
+  path       String
+  sessionId  BigInt?
+  deviceId   BigInt?
+  country    String?
+  city       String?
+  device     String?  // 'mobile' | 'tablet' | 'desktop'
+  browser    String?
+  referrer   String?
+  occurredAt DateTime @default(now())
+  raw        Json?    // full original payload
+
+  @@index([occurredAt(sort: Desc)])
+  @@index([path])
+  @@index([sessionId])
+}
