@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { countBlogPageviews } from '@/lib/analyticsQueries';
 
 // GET /api/admin/stats — site-wide statistics (admin only)
 export async function GET() {
@@ -11,7 +12,16 @@ export async function GET() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const [totalUsers, totalComments, totalLikes, totalBookmarks, totalViews, totalSubscribers, recentUsers] =
+    const [
+      totalUsers,
+      totalComments,
+      totalLikes,
+      totalBookmarks,
+      legacyTotalViews,
+      totalSubscribers,
+      recentUsers,
+      canonicalTotalViews,
+    ] =
       await Promise.all([
         prisma.user.count(),
         prisma.comment.count(),
@@ -24,6 +34,7 @@ export async function GET() {
             sessions: { some: {} },
           },
         }),
+        countBlogPageviews(),
       ]);
 
     const [topLikedSlugs, topCommentedSlugs] = await Promise.all([
@@ -41,12 +52,18 @@ export async function GET() {
       }),
     ]);
 
+    const viewDelta = canonicalTotalViews - legacyTotalViews;
+
     return NextResponse.json({
       totalUsers,
       totalComments,
       totalLikes,
       totalBookmarks,
-      totalViews,
+      totalViews: canonicalTotalViews,
+      totalViewsLegacy: legacyTotalViews,
+      totalViewsDelta: viewDelta,
+      totalViewsDriftPct:
+        legacyTotalViews > 0 ? Number(((viewDelta / legacyTotalViews) * 100).toFixed(2)) : null,
       totalSubscribers,
       recentUsers,
       topLikedSlugs: topLikedSlugs.map((s) => ({

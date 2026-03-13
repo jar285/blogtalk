@@ -1,53 +1,57 @@
-# Jesus Blog
-A fast, beautiful, statically-generated personal blog built with Next.js, Markdown, and deployed to GitHub Pages.
+# BlogTalk
 
-Designed with a premium dark glassmorphism aesthetic and optimized for a seamless writing experience.
+BlogTalk is a Next.js App Router blog platform with markdown content, authenticated user interactions, analytics collection, and MCP tools for chat-driven reporting.
 
-## The Architecture
-- **Framework:** [Next.js](https://nextjs.org) (App Router)
-- **Content:** Local `.md` files parsed via `gray-matter`
-- **Rendering:** `react-markdown` with `remark-gfm` for advanced formatting
-- **Styling:** Custom vanilla CSS (dark theme + glassmorphism)
-- **Deployment:** Statically exported (`output: 'export'`) and hosted on **GitHub Pages** via GitHub Actions
+## Stack
+- Framework: Next.js 16 (App Router)
+- Database: Supabase Postgres via Prisma
+- Auth: NextAuth/Auth.js (Google provider)
+- Content: Local markdown files parsed with `gray-matter`
+- Analytics: Client beacon ingestion into `AnalyticsEvent` + MCP query tools
+- Deployment: Vercel
 
-## How to Run Locally
-
-First, clone the repository.
-
-1. **Install dependencies:**
+## Local Development
+1. Install dependencies:
    ```bash
    npm install
    ```
-
-2. **Start the development server:**
+2. Configure environment variables (database/auth) in `.env`.
+3. Run development server:
    ```bash
    npm run dev
    ```
+4. Open `http://localhost:3000`.
 
-3. **View the site:** Open [http://localhost:3000](http://localhost:3000) with your browser.
+## Analytics And Views
+- Ingestion endpoint: `POST /api/drain/analytics`
+- Canonical blog view source: `AnalyticsEvent`
+- Compatibility endpoint for post counters: `GET/POST /api/views?slug=...`
+  - Returns canonical counts from `AnalyticsEvent`
+  - Keeps legacy `PostView` writes during reconciliation window
 
-## How to Publish Content
+## MCP Integration
+BlogTalk exposes MCP tools at `src/app/api/mcp/[transport]/route.ts`.
 
-Because this blog does not use an external CMS, the "Content API" is the file system itself.
+- Preferred transport for Studio: Streamable HTTP at `/api/mcp/mcp`
+- SSE endpoint exists at `/api/mcp/sse` but should not be your default integration path unless Redis/KV-backed SSE reliability is explicitly configured.
 
-### Editing the Homepage
-To change the intro text, tagline, or hero section on the homepage, edit the single `content/home.md` file.
+Quick probe:
 
-### Writing a New Blog Post
-Writing a post is as simple as creating a new Markdown file in the `content/posts/` directory.
+```bash
+curl -si -X POST "https://<your-host>/api/mcp/mcp" \
+  -H 'content-type: application/json' \
+  -H 'accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"probe","version":"0.0.1"}}}'
+```
 
-1. Create a new file (e.g., `content/posts/my-new-post.md`).
-2. Add the required YAML frontmatter at the top of the file:
-   ```yaml
-   ---
-   title: "Your Post Title"
-   date: "YYYY-MM-DD"
-   excerpt: "A short summary of what the post is about."
-   tags: ["tag1", "tag2"]
-   ---
-   ```
-3. Write your content in Markdown below the frontmatter. Include code blocks, tables, lists, or blockquotes!
-4. **Deploy:** Simply run `git add .`, `git commit -m "Add new post"`, and `git push`. GitHub Actions will automatically rebuild the site and push it live to GitHub Pages.
+## Deploying
+Deploys are triggered by pushing commits to `main` on GitHub (Vercel production branch).
+
+```bash
+git add .
+git commit -m "<message>"
+git push origin main
+```
 
 ## License
 MIT

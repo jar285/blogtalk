@@ -230,6 +230,43 @@ const handler = createMcpHandler(
         };
       },
     );
+
+    // ── Tool 7: Top liked posts ──────────────────────────────────
+    server.registerTool(
+      'getTopLikedPosts',
+      {
+        title: 'Get Top Liked Posts',
+        description:
+          'Returns the most liked posts ranked by like count. ' +
+          'Use this when asked what content gets the most likes or top engagement by likes.',
+        inputSchema: {
+          limit: z.number().int().min(1).max(20).default(10).describe('Number of posts to return'),
+        },
+      },
+      async ({ limit }) => {
+        const liked = await prisma.$queryRaw<{ slug: string; likes: bigint }[]>`
+          SELECT slug, COUNT(*) AS likes
+          FROM "Like"
+          GROUP BY slug
+          ORDER BY likes DESC
+          LIMIT ${limit}
+        `;
+
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({
+                posts: liked.map((row) => ({
+                  slug: row.slug,
+                  likes: Number(row.likes),
+                })),
+              }),
+            },
+          ],
+        };
+      },
+    );
   },
   {},
   {

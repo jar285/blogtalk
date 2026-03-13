@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { analyticsEventSchema } from '@/lib/validations';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimiter';
 
 /**
  * Analytics Collector — receives pageview events from the client-side hook.
@@ -16,6 +18,20 @@ import { Prisma } from '@prisma/client';
  */
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rate = checkRateLimit(`analytics:${ip}`, 120);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(rate.retryAfterSeconds),
+        },
+      },
+    );
+  }
+
   let payload: unknown;
   try {
     payload = await req.json();
@@ -28,32 +44,58 @@ export async function POST(req: NextRequest) {
     ? payload
     : [payload];
 
+  if (events.length > 100) {
+    return NextResponse.json({ error: 'Too many events in one request' }, { status: 413 });
+  }
+
   if (events.length === 0) {
     return NextResponse.json({ received: 0 });
   }
 
+  const nowMs = Date.now();
+  const maxFutureSkewMs = 5 * 60 * 1000;
+  const minTimestampMs = Date.UTC(2020, 0, 1);
+
+  const parsedEvents = events
+    .map((rawEvent) => analyticsEventSchema.safeParse(rawEvent))
+    .filter((result): result is { success: true; data: ReturnType<typeof analyticsEventSchema.parse> } => result.success)
+    .map((result) => result.data)
+    .filter((event) => {
+      if (!event.timestamp) {
+        return true;
+      }
+      return event.timestamp >= minTimestampMs && event.timestamp <= nowMs + maxFutureSkewMs;
+    });
+
+  if (parsedEvents.length === 0) {
+    return NextResponse.json({ error: 'No valid events' }, { status: 400 });
+  }
+
   try {
     await prisma.analyticsEvent.createMany({
-      data: events.map((e) => ({
-        eventType:  String(e.eventType ?? 'pageview'),
-        eventName:  e.eventName != null ? String(e.eventName) : null,
-        path:       String(e.path ?? '/'),
-        sessionId:  e.sessionId != null ? BigInt(e.sessionId as number) : null,
-        deviceId:   e.deviceId != null ? BigInt(e.deviceId as number) : null,
-        country:    e.country != null ? String(e.country) : null,
-        city:       e.city != null ? String(e.city) : null,
-        device:     e.device != null ? String(e.device) : null,
-        browser:    e.browser != null ? String(e.browser) : null,
-        referrer:   e.referrer != null ? String(e.referrer) : null,
-        occurredAt: e.timestamp
-          ? new Date(e.timestamp as number)
+      data: parsedEvents.map((event) => ({
+        eventType: event.eventType,
+        eventName: event.eventName ?? null,
+        path: event.path,
+        sessionId: event.sessionId != null ? BigInt(event.sessionId) : null,
+        deviceId: event.deviceId != null ? BigInt(event.deviceId) : null,
+        country: event.country ?? null,
+        city: event.city ?? null,
+        device: event.device ?? null,
+        browser: event.browser ?? null,
+        referrer: event.referrer ?? null,
+        occurredAt: event.timestamp
+          ? new Date(event.timestamp)
           : new Date(),
-        raw:        e as unknown as Prisma.InputJsonValue,
+        raw: event as unknown as Prisma.InputJsonValue,
       })),
       skipDuplicates: true,
     });
 
-    return NextResponse.json({ received: events.length });
+    return NextResponse.json({
+      received: parsedEvents.length,
+      rejected: events.length - parsedEvents.length,
+    });
   } catch (error) {
     console.error('[analytics] Insert error:', error);
     return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
