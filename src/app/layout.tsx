@@ -14,6 +14,7 @@ import CommandMenu from "@/components/CommandMenu";
 import ProgressBar from "@/components/ProgressBar";
 import NavBar from "@/components/NavBar";
 import SessionProvider from "@/components/SessionProvider";
+import AnalyticsCollector from "@/components/AnalyticsCollector";
 
 import { getAllPosts } from '@/lib/markdown';
 
@@ -56,6 +57,7 @@ export default function RootLayout({
           </div>
         </SessionProvider>
         <Analytics />
+        <AnalyticsCollector />
       </body>
     </html>
   )
