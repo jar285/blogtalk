@@ -34,6 +34,32 @@ function normalizedAnalyticsFilter(from: Date, to: Date, strictEventTokens = tru
   `;
 }
 
+function isDateOnlyInput(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value.trim());
+}
+
+function normalizeWindow(from: string, to: string): { fromDate: Date; toDate: Date } {
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+
+  if (Number.isNaN(fromDate.getTime()) || Number.isNaN(toDate.getTime())) {
+    throw new Error('Invalid date range. Use ISO 8601 values for from/to.');
+  }
+
+  // For date-only values, treat `to` as end-of-day UTC so whole-day ranges are included.
+  if (isDateOnlyInput(to)) {
+    toDate.setUTCHours(23, 59, 59, 999);
+  }
+
+  if (isDateOnlyInput(from)) {
+    fromDate.setUTCHours(0, 0, 0, 0);
+  }
+
+  return fromDate <= toDate
+    ? { fromDate, toDate }
+    : { fromDate: toDate, toDate: fromDate };
+}
+
 const handler = createMcpHandler(
   (server) => {
     // ── Tool 1: Pageviews over a date range ──────────────────────
@@ -50,8 +76,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let rows = await prisma.$queryRaw<{ count: bigint }[]>`
           SELECT COUNT(*)::bigint AS count
@@ -92,8 +117,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to, limit }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let pages = await prisma.$queryRaw<{ path: string; pageviews: bigint }[]>`
           SELECT path, COUNT(*) AS pageviews
@@ -142,8 +166,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let result = await prisma.$queryRaw<{ count: bigint }[]>`
           SELECT COUNT(DISTINCT "sessionId") AS count
@@ -191,8 +214,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to, limit }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let sources = await prisma.$queryRaw<{ referrer: string; pageviews: bigint }[]>`
           SELECT COALESCE(referrer, '(direct)') AS referrer, COUNT(*) AS pageviews
@@ -244,8 +266,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let devices = await prisma.$queryRaw<{ device: string; count: bigint }[]>`
           SELECT COALESCE(device, 'unknown') AS device, COUNT(*) AS count
@@ -292,8 +313,7 @@ const handler = createMcpHandler(
         },
       },
       async ({ from, to }) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
+        const { fromDate, toDate } = normalizeWindow(from, to);
 
         let trend = await prisma.$queryRaw<{ day: Date; pageviews: bigint }[]>`
           SELECT "occurredAt"::date AS day, COUNT(*) AS pageviews
