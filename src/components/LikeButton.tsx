@@ -9,22 +9,62 @@ interface LikeButtonProps {
 }
 
 export default function LikeButton({ slug }: LikeButtonProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [count, setCount] = useState(0);
   const [liked, setLiked] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [loadingState, setLoadingState] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/likes?slug=${encodeURIComponent(slug)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCount(data.count);
-        setLiked(data.liked);
-      })
-      .catch(() => {});
+    let isMounted = true;
+
+    async function loadLikes() {
+      setLoadingState(true);
+      setLoadError(false);
+
+      const maxAttempts = 2;
+      let lastError: unknown = null;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        try {
+          const res = await fetch(`/api/likes?slug=${encodeURIComponent(slug)}`);
+          if (!res.ok) {
+            throw new Error(`likes fetch failed: ${res.status}`);
+          }
+          const data = await res.json();
+
+          if (!isMounted) return;
+
+          setCount(data.count);
+          setLiked(data.liked);
+          setLoadingState(false);
+          return;
+        } catch (err) {
+          lastError = err;
+          if (attempt < maxAttempts) {
+            await new Promise((resolve) => setTimeout(resolve, 200 * attempt));
+          }
+        }
+      }
+
+      if (!isMounted) return;
+
+      console.warn('Failed to load like state', { slug, error: lastError });
+      setLoadError(true);
+      setLoadingState(false);
+    }
+
+    loadLikes();
+
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   const handleClick = async () => {
+    if (loadingState || status === 'loading') return;
+
     if (!session) {
       signIn('google');
       return;
@@ -65,6 +105,9 @@ export default function LikeButton({ slug }: LikeButtonProps) {
       className={`like-button ${liked ? 'liked' : ''} ${animating ? 'like-pop' : ''}`}
       onClick={handleClick}
       aria-label={liked ? 'Unlike this post' : 'Like this post'}
+      aria-busy={loadingState}
+      disabled={loadingState}
+      title={loadError ? 'Like count may be temporarily stale. Try refreshing.' : undefined}
     >
       <Heart
         size={20}
